@@ -1,0 +1,146 @@
+{% extends "base.html" %}
+
+{% block title %}Nuevo Paciente - Sistema Médico{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+    <h1 class="h2">
+        <i class="fas fa-user-plus me-2"></i>Agregar Nuevo Paciente
+    </h1>
+    <a href="{{ url_for('pacientes') }}" class="btn btn-secondary">
+        <i class="fas fa-arrow-left me-2"></i>Volver
+    </a>
+</div>
+
+<div class="card shadow form-container">
+    <div class="card-header bg-primary text-white">
+        <h5 class="mb-0">
+            <i class="fas fa-user me-2"></i>Información del Paciente
+        </h5>
+    </div>
+    <div class="card-body">
+        <form method="POST" id="pacienteForm">
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label for="nombres" class="form-label">
+                        <i class="fas fa-user"></i>Nombres *
+                    </label>
+                    <input type="text" class="form-control" id="nombres" name="nombres" required
+                           placeholder="Ingrese los nombres">
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label for="apellidos" class="form-label">
+                        <i class="fas fa-user"></i>Apellidos *
+                    </label>
+                    <input type="text" class="form-control" id="apellidos" name="apellidos" required
+                           placeholder="Ingrese los apellidos">
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label for="fecha_nacimiento" class="form-label">
+                        <i class="fas fa-calendar-alt"></i>Fecha de Nacimiento *
+                    </label>
+                    <input type="date" class="form-control" id="fecha_nacimiento" name="fecha_nacimiento" required>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label for="telefono" class="form-label">
+                        <i class="fas fa-phone"></i>Teléfono
+                    </label>
+                    <input type="tel" class="form-control" id="telefono" name="telefono"
+                           placeholder="Ej: +51 999 999 999">
+                </div>
+            </div>
+
+            <div class="mb-3">
+                <label for="direccion" class="form-label">
+                    <i class="fas fa-map-marker-alt"></i>Dirección
+                </label>
+                <input type="text" class="form-control" id="direccion" name="direccion"
+                       placeholder="Ingrese la dirección completa">
+            </div>
+
+            <hr class="my-4">
+            <h6 class="text-primary">
+                <i class="fas fa-key me-2"></i>Datos de Acceso
+            </h6>
+
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label for="usuario" class="form-label">
+                        <i class="fas fa-user-circle"></i>Usuario *
+                    </label>
+                    <input type="text" class="form-control" id="usuario" name="usuario" required
+                           placeholder="Nombre de usuario único">
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label for="email" class="form-label">
+                        <i class="fas fa-envelope"></i>Email *
+                    </label>
+                    <input type="email" class="form-control" id="email" name="email" required
+                           placeholder="correo@ejemplo.com">
+                </div>
+            </div>
+
+            <div class="mb-3">
+                <label for="password" class="form-label">
+                    <i class="fas fa-lock"></i>Contraseña *
+                </label>
+                <input type="password" class="form-control" id="password" name="password" required
+                       placeholder="Mínimo 6 caracteres">
+                <div class="form-text">La contraseña debe tener al menos 6 caracteres</div>
+            </div>
+
+            <div class="d-flex justify-content-between">
+                <a href="{{ url_for('pacientes') }}" class="btn btn-secondary">
+                    <i class="fas fa-times me-1"></i>Cancelar
+                </a>
+                <button type="submit" class="btn btn-primary">
+                    <i class="fas fa-save me-1"></i>Guardar Paciente
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+document.getElementById('pacienteForm').addEventListener('submit', function(e) {
+    const nombres = document.getElementById('nombres').value.trim();
+    const apellidos = document.getElementById('apellidos').value.trim();
+    const usuario = document.getElementById('usuario').value.trim();
+    const email = document.getElementById('email').value.trim();
+    const password = document.getElementById('password').value;
+    
+    if (nombres.length < 2) {
+        e.preventDefault();
+        alert('Los nombres deben tener al menos 2 caracteres');
+        return;
+    }
+    
+    if (apellidos.length < 2) {
+        e.preventDefault();
+        alert('Los apellidos deben tener al menos 2 caracteres');
+        return;
+    }
+    
+    if (usuario.length < 3) {
+        e.preventDefault();
+        alert('El usuario debe tener al menos 3 caracteres');
+        return;
+    }
+    
+    if (!email.includes('@')) {
+        e.preventDefault();
+        alert('Ingrese un email válido');
+        return;
+    }
+    
+    if (password.length < 6) {
+        e.preventDefault();
+        alert('La contraseña debe tener al menos 6 caracteres');
+        return;
+    }
+});
+</script>
+{% endblock %}

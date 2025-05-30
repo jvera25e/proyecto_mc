@@ -1,0 +1,111 @@
+{% extends "base.html" %}
+
+{% block title %}Editar Cita{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow form-container">
+                <div class="card-header bg-warning text-dark">
+                    <h4 class="mb-0">
+                        <i class="fas fa-calendar-edit me-2"></i>Editar Cita
+                    </h4>
+                </div>
+                <div class="card-body">
+                    <form method="POST" id="citaForm">
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="paciente_id" class="form-label">
+                                    <i class="fas fa-user"></i>Paciente *
+                                </label>
+                                <select class="form-select" id="paciente_id" name="paciente_id" required>
+                                    <option value="">Seleccione un paciente</option>
+                                    {% for paciente in pacientes %}
+                                        <option value="{{ paciente.id }}" {% if paciente.id == cita.paciente_id %}selected{% endif %}>
+                                            {{ paciente.nombre_completo }}
+                                        </option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="medico_id" class="form-label">
+                                    <i class="fas fa-user-md"></i>Médico *
+                                </label>
+                                <select class="form-select" id="medico_id" name="medico_id" required>
+                                    <option value="">Seleccione un médico</option>
+                                    {% for medico in medicos %}
+                                        <option value="{{ medico.id }}" {% if medico.id == cita.medico_id %}selected{% endif %}>
+                                            {{ medico.nombre_completo }}
+                                        </option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="fecha_hora" class="form-label">
+                                    <i class="fas fa-calendar-alt"></i>Fecha y Hora *
+                                </label>
+                                <input type="datetime-local" class="form-control" id="fecha_hora" name="fecha_hora" 
+                                       value="{{ cita.fecha_hora.strftime('%Y-%m-%dT%H:%M') }}" required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="estado" class="form-label">
+                                    <i class="fas fa-info-circle"></i>Estado *
+                                </label>
+                                <select class="form-select" id="estado" name="estado" required>
+                                    <option value="programada" {% if cita.estado == 'programada' %}selected{% endif %}>Programada</option>
+                                    <option value="confirmada" {% if cita.estado == 'confirmada' %}selected{% endif %}>Confirmada</option>
+                                    <option value="realizada" {% if cita.estado == 'realizada' %}selected{% endif %}>Realizada</option>
+                                    <option value="cancelada" {% if cita.estado == 'cancelada' %}selected{% endif %}>Cancelada</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="notas" class="form-label">
+                                <i class="fas fa-notes-medical"></i>Notas
+                            </label>
+                            <textarea class="form-control" id="notas" name="notas" rows="3" 
+                                      placeholder="Motivo de la consulta o notas adicionales">{{ cita.notas or '' }}</textarea>
+                        </div>
+
+                        <div class="d-flex justify-content-between">
+                            <a href="{{ url_for('citas') }}" class="btn btn-secondary">
+                                <i class="fas fa-arrow-left me-1"></i>Cancelar
+                            </a>
+                            <button type="submit" class="btn btn-warning">
+                                <i class="fas fa-save me-1"></i>Actualizar Cita
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+document.getElementById('citaForm').addEventListener('submit', function(e) {
+    const fechaHora = new Date(document.getElementById('fecha_hora').value);
+    const ahora = new Date();
+    
+    if (fechaHora < ahora) {
+        if (!confirm('La fecha y hora seleccionada es en el pasado. ¿Está seguro de continuar?')) {
+            e.preventDefault();
+            return;
+        }
+    }
+    
+    // Verificar que no sea domingo
+    if (fechaHora.getDay() === 0) {
+        if (!confirm('Ha seleccionado un domingo. ¿Está seguro de programar la cita en este día?')) {
+            e.preventDefault();
+            return;
+        }
+    }
+});
+</script>
+{% endblock %}

@@ -4,20 +4,13 @@
 
 {% block content %}
 <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-    <h1 class="h2">
-        <i class="fas fa-chart-line me-2 text-primary"></i>Dashboard del Sistema
-    </h1>
-    <div class="btn-toolbar mb-2 mb-md-0">
-        <div class="btn-group me-2">
-            <span class="badge bg-success"></span>
-        </div>
-    </div>
+    <h1 class="h2">Dashboard</h1>
 </div>
 
-<!-- Estadísticas principales -->
+<!-- Estadísticas -->
 <div class="row mb-4">
     <div class="col-xl-3 col-md-6 mb-4">
-        <div class="card card-stats border-primary shadow h-100 py-2">
+        <div class="card card-stats border-left-primary shadow h-100 py-2">
             <div class="card-body">
                 <div class="row no-gutters align-items-center">
                     <div class="col mr-2">
@@ -25,11 +18,11 @@
                             Total Pacientes
                         </div>
                         <div class="h5 mb-0 font-weight-bold text-gray-800">
-                            {{ stats.pacientes }}
+                            {{ stats.total_pacientes or 0 }}
                         </div>
                     </div>
                     <div class="col-auto">
-                        <i class="fas fa-users fa-2x text-primary"></i>
+                        <i class="fas fa-users fa-2x text-gray-300"></i>
                     </div>
                 </div>
             </div>
@@ -37,19 +30,19 @@
     </div>
 
     <div class="col-xl-3 col-md-6 mb-4">
-        <div class="card card-stats border-success shadow h-100 py-2">
+        <div class="card card-stats border-left-success shadow h-100 py-2">
             <div class="card-body">
                 <div class="row no-gutters align-items-center">
                     <div class="col mr-2">
                         <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
-                            Médicos
+                            Médicos Activos
                         </div>
                         <div class="h5 mb-0 font-weight-bold text-gray-800">
-                            {{ stats.medicos }}
+                            {{ stats.total_medicos or 0 }}
                         </div>
                     </div>
                     <div class="col-auto">
-                        <i class="fas fa-user-md fa-2x text-success"></i>
+                        <i class="fas fa-user-md fa-2x text-gray-300"></i>
                     </div>
                 </div>
             </div>
@@ -57,19 +50,19 @@
     </div>
 
     <div class="col-xl-3 col-md-6 mb-4">
-        <div class="card card-stats border-info shadow h-100 py-2">
+        <div class="card card-stats border-left-info shadow h-100 py-2">
             <div class="card-body">
                 <div class="row no-gutters align-items-center">
                     <div class="col mr-2">
                         <div class="text-xs font-weight-bold text-info text-uppercase mb-1">
-                            Citas Registradas
+                            Citas Hoy
                         </div>
                         <div class="h5 mb-0 font-weight-bold text-gray-800">
-                            {{ stats.citas }}
+                            {{ stats.citas_hoy or 0 }}
                         </div>
                     </div>
                     <div class="col-auto">
-                        <i class="fas fa-calendar-alt fa-2x text-info"></i>
+                        <i class="fas fa-calendar-day fa-2x text-gray-300"></i>
                     </div>
                 </div>
             </div>
@@ -77,19 +70,19 @@
     </div>
 
     <div class="col-xl-3 col-md-6 mb-4">
-        <div class="card card-stats border-warning shadow h-100 py-2">
+        <div class="card card-stats border-left-warning shadow h-100 py-2">
             <div class="card-body">
                 <div class="row no-gutters align-items-center">
                     <div class="col mr-2">
                         <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
-                            Especialidades
+                            Pendientes
                         </div>
                         <div class="h5 mb-0 font-weight-bold text-gray-800">
-                            {{ stats.especialidades }}
+                            {{ stats.citas_pendientes or 0 }}
                         </div>
                     </div>
                     <div class="col-auto">
-                        <i class="fas fa-stethoscope fa-2x text-warning"></i>
+                        <i class="fas fa-clock fa-2x text-gray-300"></i>
                     </div>
                 </div>
             </div>
@@ -97,82 +90,50 @@
     </div>
 </div>
 
-<!-- Información del proyecto -->
-<div class="row">
-    <div class="col-lg-8">
-        <div class="card shadow mb-4">
-            <div class="card-header py-3">
-                <h6 class="m-0 font-weight-bold text-primary">
-                    <i class="fas fa-info-circle me-2"></i>Información del Proyecto
-                </h6>
-            </div>
-            <div class="card-body">
-                <h5>Sistema de Gestión Médica</h5>
-                <p class="text-muted">Aplicación web desarrollada con Flask y MySQL para la gestión de un centro médico.</p>
-                
-                <div class="row">
-                    <div class="col-md-6">
-                        <h6><i class="fas fa-check-circle text-success me-2"></i>Funcionalidades Implementadas:</h6>
-                        <ul class="list-unstyled">
-                            <li><i class="fas fa-chevron-right text-primary me-2"></i>Dashboard con estadísticas</li>
-                            <li><i class="fas fa-chevron-right text-primary me-2"></i>Gestión de pacientes</li>
-                            <li><i class="fas fa-chevron-right text-primary me-2"></i>Gestión de especialidades</li>
-                            <li><i class="fas fa-chevron-right text-primary me-2"></i>Conexión a MySQL</li>
-                        </ul>
-                    </div>
-                    <div class="col-md-6">
-                        <h6><i class="fas fa-tools text-info me-2"></i>Tecnologías Utilizadas:</h6>
-                        <ul class="list-unstyled">
-                            <li><i class="fab fa-python text-warning me-2"></i>Python + Flask</li>
-                            <li><i class="fas fa-database text-primary me-2"></i>MySQL (XAMPP)</li>
-                            <li><i class="fab fa-bootstrap text-purple me-2"></i>Bootstrap 5</li>
-                            <li><i class="fab fa-html5 text-danger me-2"></i>HTML5 + CSS3</li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-        </div>
+<!-- Citas Recientes -->
+<div class="card shadow mb-4">
+    <div class="card-header py-3">
+        <h6 class="m-0 font-weight-bold text-primary">Citas Recientes</h6>
     </div>
-
-    <div class="col-lg-4">
-        <div class="card shadow mb-4">
-            <div class="card-header py-3">
-                <h6 class="m-0 font-weight-bold text-success">
-                    <i class="fas fa-database me-2"></i>Estado de la Base de Datos
-                </h6>
+    <div class="card-body">
+        {% if citas_recientes %}
+            <div class="table-responsive">
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th>Paciente</th>
+                            <th>Médico</th>
+                            <th>Especialidad</th>
+                            <th>Fecha y Hora</th>
+                            <th>Estado</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for cita in citas_recientes %}
+                        <tr>
+                            <td>{{ cita.paciente }}</td>
+                            <td>{{ cita.medico }}</td>
+                            <td>{{ cita.especialidad }}</td>
+                            <td>{{ cita.fecha_hora.strftime('%d/%m/%Y %H:%M') }}</td>
+                            <td>
+                                {% if cita.estado == 'confirmada' %}
+                                    <span class="badge bg-primary badge-estado">{{ cita.estado }}</span>
+                                {% elif cita.estado == 'realizada' %}
+                                    <span class="badge bg-success badge-estado">{{ cita.estado }}</span>
+                                {% elif cita.estado == 'cancelada' %}
+                                    <span class="badge bg-danger badge-estado">{{ cita.estado }}</span>
+                                {% else %}
+                                    <span class="badge bg-secondary badge-estado">{{ cita.estado }}</span>
+                                {% endif %}
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
             </div>
-            <div class="card-body text-center">
-                <div class="mb-3">
-                    <i class="fas fa-server fa-3x text-success"></i>
-                </div>
-                <h5 class="text-success">Conectado</h5>
-                <p class="text-muted">MySQL funcionando correctamente</p>
-                <a href="{{ url_for('test_conexion') }}" class="btn btn-outline-success btn-sm">
-                    <i class="fas fa-check me-1"></i>Probar Conexión
-                </a>
-            </div>
-        </div>
-
-        <div class="card shadow">
-            <div class="card-header py-3">
-                <h6 class="m-0 font-weight-bold text-info">
-                    <i class="fas fa-link me-2"></i>Enlaces Rápidos
-                </h6>
-            </div>
-            <div class="card-body">
-                <div class="d-grid gap-2">
-                    <a href="{{ url_for('pacientes') }}" class="btn btn-outline-primary btn-sm">
-                        <i class="fas fa-users me-2"></i>Ver Pacientes
-                    </a>
-                    <a href="{{ url_for('especialidades') }}" class="btn btn-outline-success btn-sm">
-                        <i class="fas fa-stethoscope me-2"></i>Ver Especialidades
-                    </a>
-                    <a href="{{ url_for('nueva_especialidad') }}" class="btn btn-outline-info btn-sm">
-                        <i class="fas fa-plus me-2"></i>Nueva Especialidad
-                    </a>
-                </div>
-            </div>
-        </div>
+        {% else %}
+            <p class="text-muted">No hay citas registradas.</p>
+        {% endif %}
     </div>
 </div>
 {% endblock %}

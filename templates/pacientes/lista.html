@@ -1,0 +1,128 @@
+{% extends "base.html" %}
+
+{% block title %}Pacientes - Sistema Médico{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+    <h1 class="h2">
+        <i class="fas fa-users me-2"></i>Gestión de Pacientes
+    </h1>
+    <a href="{{ url_for('nuevo_paciente') }}" class="btn btn-primary">
+        <i class="fas fa-plus me-2"></i>Nuevo Paciente
+    </a>
+</div>
+
+<div class="card shadow">
+    <div class="card-header bg-primary text-white">
+        <h6 class="m-0 font-weight-bold">
+            <i class="fas fa-list me-2"></i>Lista de Pacientes
+        </h6>
+    </div>
+    <div class="card-body">
+        {% if pacientes %}
+            <div class="table-responsive">
+                <table class="table table-bordered table-hover">
+                    <thead>
+                        <tr>
+                            <th><i class="fas fa-hashtag me-1"></i>ID</th>
+                            <th><i class="fas fa-user me-1"></i>Nombre Completo</th>
+                            <th><i class="fas fa-calendar-alt me-1"></i>Fecha Nacimiento</th>
+                            <th><i class="fas fa-phone me-1"></i>Teléfono</th>
+                            <th><i class="fas fa-map-marker-alt me-1"></i>Dirección</th>
+                            <th><i class="fas fa-user-circle me-1"></i>Usuario</th>
+                            <th><i class="fas fa-envelope me-1"></i>Email</th>
+                            <th><i class="fas fa-cogs me-1"></i>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for paciente in pacientes %}
+                        <tr>
+                            <td>{{ paciente.id }}</td>
+                            <td>
+                                <strong>{{ paciente.nombres }} {{ paciente.apellidos }}</strong>
+                            </td>
+                            <td>{{ paciente.fecha_nacimiento.strftime('%d/%m/%Y') }}</td>
+                            <td>{{ paciente.telefono or 'N/A' }}</td>
+                            <td>{{ paciente.direccion or 'N/A' }}</td>
+                            <td>
+                                <span class="badge bg-info">{{ paciente.usuario }}</span>
+                            </td>
+                            <td>{{ paciente.email }}</td>
+                            <td>
+                                <div class="btn-group" role="group">
+                                    <a href="{{ url_for('editar_paciente', id=paciente.id) }}" 
+                                       class="btn btn-sm btn-outline-warning" title="Editar">
+                                        <i class="fas fa-edit"></i>
+                                    </a>
+                                    <button type="button" 
+                                            class="btn btn-sm btn-outline-danger" 
+                                            onclick="confirmarEliminacion('{{ paciente.id }}', '{{ paciente.nombres }} {{ paciente.apellidos }}')" 
+                                            title="Eliminar">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        {% else %}
+            <div class="empty-state">
+                <i class="fas fa-users fa-4x"></i>
+                <h4>No hay pacientes registrados</h4>
+                <p>Comience agregando el primer paciente al sistema</p>
+                <a href="{{ url_for('nuevo_paciente') }}" class="btn btn-primary">
+                    <i class="fas fa-plus me-2"></i>Agregar Primer Paciente
+                </a>
+            </div>
+        {% endif %}
+    </div>
+</div>
+
+<!-- Modal de Confirmación -->
+<div class="modal fade" id="modalEliminar" tabindex="-1" aria-labelledby="modalEliminarLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header bg-danger text-white">
+                <h5 class="modal-title" id="modalEliminarLabel">
+                    <i class="fas fa-exclamation-triangle me-2"></i>Confirmar Eliminación
+                </h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="text-center">
+                    <i class="fas fa-user-times fa-4x text-danger mb-3"></i>
+                    <h5>¿Está seguro de eliminar este paciente?</h5>
+                    <p class="text-muted mb-3">
+                        <strong id="nombrePaciente"></strong>
+                    </p>
+                    <div class="alert alert-warning">
+                        <i class="fas fa-exclamation-triangle me-2"></i>
+                        <strong>Advertencia:</strong> Esta acción no se puede deshacer. 
+                        Se eliminará toda la información del paciente.
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                    <i class="fas fa-times me-1"></i>Cancelar
+                </button>
+                <a href="#" id="btnConfirmarEliminar" class="btn btn-danger">
+                    <i class="fas fa-trash me-1"></i>Eliminar Paciente
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+function confirmarEliminacion(id, nombre) {
+    document.getElementById('nombrePaciente').textContent = nombre;
+    document.getElementById('btnConfirmarEliminar').href = "{{ url_for('eliminar_paciente', id=0) }}".replace('0', id);
+    
+    const modal = new bootstrap.Modal(document.getElementById('modalEliminar'));
+    modal.show();
+}
+</script>
+{% endblock %}

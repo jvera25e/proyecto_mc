@@ -1,0 +1,105 @@
+{% extends "base.html" %}
+
+{% block title %}Nueva Cita - Sistema Médico{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+    <h1 class="h2">
+        <i class="fas fa-calendar-plus me-2"></i>Programar Nueva Cita
+    </h1>
+    <a href="{{ url_for('citas') }}" class="btn btn-secondary">
+        <i class="fas fa-arrow-left me-2"></i>Volver
+    </a>
+</div>
+
+<div class="card shadow form-container">
+    <div class="card-header bg-info text-white">
+        <h5 class="mb-0">
+            <i class="fas fa-calendar-alt me-2"></i>Información de la Cita
+        </h5>
+    </div>
+    <div class="card-body">
+        <form method="POST" id="citaForm">
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label for="paciente_id" class="form-label">
+                        <i class="fas fa-user"></i>Paciente *
+                    </label>
+                    <select class="form-select" id="paciente_id" name="paciente_id" required>
+                        <option value="">Selecciona un paciente</option>
+                        {% for paciente in pacientes %}
+                        <option value="{{ paciente.id }}">{{ paciente.nombre_completo }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label for="medico_id" class="form-label">
+                        <i class="fas fa-user-md"></i>Médico *
+                    </label>
+                    <select class="form-select" id="medico_id" name="medico_id" required>
+                        <option value="">Selecciona un médico</option>
+                        {% for medico in medicos %}
+                        <option value="{{ medico.id }}">{{ medico.nombre_completo }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+
+            <div class="mb-3">
+                <label for="fecha_hora" class="form-label">
+                    <i class="fas fa-calendar-alt"></i>Fecha y Hora *
+                </label>
+                <input type="datetime-local" class="form-control" id="fecha_hora" name="fecha_hora" required>
+                <div class="form-text">Seleccione la fecha y hora de la cita</div>
+            </div>
+
+            <div class="mb-3">
+                <label for="notas" class="form-label">
+                    <i class="fas fa-notes-medical"></i>Notas
+                </label>
+                <textarea class="form-control" id="notas" name="notas" rows="3" 
+                          placeholder="Motivo de la consulta o notas adicionales"></textarea>
+            </div>
+
+            <div class="d-flex justify-content-between">
+                <a href="{{ url_for('citas') }}" class="btn btn-secondary">
+                    <i class="fas fa-times me-1"></i>Cancelar
+                </a>
+                <button type="submit" class="btn btn-info">
+                    <i class="fas fa-save me-1"></i>Programar Cita
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+document.getElementById('citaForm').addEventListener('submit', function(e) {
+    const fechaHora = new Date(document.getElementById('fecha_hora').value);
+    const ahora = new Date();
+    
+    if (fechaHora < ahora) {
+        if (!confirm('La fecha y hora seleccionada es en el pasado. ¿Está seguro de continuar?')) {
+            e.preventDefault();
+            return;
+        }
+    }
+    
+    // Verificar que no sea domingo
+    if (fechaHora.getDay() === 0) {
+        if (!confirm('Ha seleccionado un domingo. ¿Está seguro de programar la cita en este día?')) {
+            e.preventDefault();
+            return;
+        }
+    }
+});
+
+// Establecer fecha mínima como hoy
+document.addEventListener('DOMContentLoaded', function() {
+    const fechaInput = document.getElementById('fecha_hora');
+    const ahora = new Date();
+    const fechaMinima = ahora.toISOString().slice(0, 16);
+    fechaInput.min = fechaMinima;
+});
+</script>
+{% endblock %}

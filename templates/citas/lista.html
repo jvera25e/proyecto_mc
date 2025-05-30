@@ -1,0 +1,184 @@
+{% extends "base.html" %}
+
+{% block title %}Citas - Sistema Médico{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+    <h1 class="h2">
+        <i class="fas fa-calendar-alt me-2"></i>Gestión de Citas
+    </h1>
+    <a href="{{ url_for('nueva_cita') }}" class="btn btn-primary">
+        <i class="fas fa-plus me-2"></i>Nueva Cita
+    </a>
+</div>
+
+<div class="card shadow">
+    <div class="card-header bg-info text-white">
+        <h6 class="m-0 font-weight-bold">
+            <i class="fas fa-list me-2"></i>Lista de Citas
+        </h6>
+    </div>
+    <div class="card-body">
+        {% if citas %}
+            <div class="table-responsive">
+                <table class="table table-bordered table-hover">
+                    <thead>
+                        <tr>
+                            <th><i class="fas fa-hashtag me-1"></i>ID</th>
+                            <th><i class="fas fa-user me-1"></i>Paciente</th>
+                            <th><i class="fas fa-user-md me-1"></i>Médico</th>
+                            <th><i class="fas fa-stethoscope me-1"></i>Especialidad</th>
+                            <th><i class="fas fa-calendar-alt me-1"></i>Fecha y Hora</th>
+                            <th><i class="fas fa-info-circle me-1"></i>Estado</th>
+                            <th><i class="fas fa-notes-medical me-1"></i>Notas</th>
+                            <th><i class="fas fa-cogs me-1"></i>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for cita in citas %}
+                        <tr>
+                            <td>{{ cita.id }}</td>
+                            <td>
+                                <strong>{{ cita.paciente }}</strong>
+                            </td>
+                            <td>{{ cita.medico }}</td>
+                            <td>
+                                <span class="badge bg-primary">{{ cita.especialidad }}</span>
+                            </td>
+                            <td>
+                                <i class="fas fa-calendar me-1"></i>
+                                {{ cita.fecha_hora.strftime('%d/%m/%Y') }}<br>
+                                <i class="fas fa-clock me-1"></i>
+                                {{ cita.fecha_hora.strftime('%H:%M') }}
+                            </td>
+                            <td>
+                                {% if cita.estado == 'confirmada' %}
+                                    <span class="badge bg-primary">{{ cita.estado }}</span>
+                                {% elif cita.estado == 'realizada' %}
+                                    <span class="badge bg-success">{{ cita.estado }}</span>
+                                {% elif cita.estado == 'cancelada' %}
+                                    <span class="badge bg-danger">{{ cita.estado }}</span>
+                                {% else %}
+                                    <span class="badge bg-secondary">{{ cita.estado }}</span>
+                                {% endif %}
+                            </td>
+                            <td>{{ cita.notas or 'N/A' }}</td>
+                            <td>
+                                <div class="btn-group-vertical" role="group">
+                                    {% if cita.estado == 'programada' %}
+                                        <a href="{{ url_for('actualizar_estado_cita', cita_id=cita.id, estado='confirmada') }}" 
+                                           class="btn btn-sm btn-success mb-1" title="Confirmar">
+                                            <i class="fas fa-check me-1"></i>Confirmar
+                                        </a>
+                                    {% elif cita.estado == 'confirmada' %}
+                                        <a href="{{ url_for('actualizar_estado_cita', cita_id=cita.id, estado='realizada') }}" 
+                                           class="btn btn-sm btn-primary mb-1" title="Completar">
+                                            <i class="fas fa-check-double me-1"></i>Completar
+                                        </a>
+                                    {% endif %}
+                                    <div class="btn-group" role="group">
+                                        <a href="{{ url_for('editar_cita', id=cita.id) }}" 
+                                           class="btn btn-sm btn-outline-warning" title="Editar">
+                                            <i class="fas fa-edit"></i>
+                                        </a>
+                                        <button type="button" 
+                                                class="btn btn-sm btn-outline-danger btn-eliminar-cita" 
+                                                data-cita-id="{{ cita.id }}"
+                                                data-paciente="{{ cita.paciente }}"
+                                                data-medico="{{ cita.medico }}"
+                                                data-fecha="{{ cita.fecha_hora.strftime('%d/%m/%Y') }}"
+                                                data-hora="{{ cita.fecha_hora.strftime('%H:%M') }}"
+                                                title="Eliminar">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        {% else %}
+            <div class="empty-state">
+                <i class="fas fa-calendar-alt fa-4x"></i>
+                <h4>No hay citas registradas</h4>
+                <p>Comience programando la primera cita</p>
+                <a href="{{ url_for('nueva_cita') }}" class="btn btn-info">
+                    <i class="fas fa-plus me-2"></i>Programar Primera Cita
+                </a>
+            </div>
+        {% endif %}
+    </div>
+</div>
+
+<!-- Modal de Confirmación -->
+<div class="modal fade" id="modalEliminar" tabindex="-1" aria-labelledby="modalEliminarLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header bg-danger text-white">
+                <h5 class="modal-title" id="modalEliminarLabel">
+                    <i class="fas fa-exclamation-triangle me-2"></i>Confirmar Eliminación
+                </h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="text-center">
+                    <i class="fas fa-calendar-times fa-4x text-danger mb-3"></i>
+                    <h5>¿Está seguro de eliminar esta cita?</h5>
+                    <div class="card mt-3">
+                        <div class="card-body">
+                            <p class="mb-1"><strong>Paciente:</strong> <span id="pacienteCita"></span></p>
+                            <p class="mb-1"><strong>Médico:</strong> <span id="medicoCita"></span></p>
+                            <p class="mb-0"><strong>Fecha:</strong> <span id="fechaCita"></span> a las <span id="horaCita"></span></p>
+                        </div>
+                    </div>
+                    <div class="alert alert-warning mt-3">
+                        <i class="fas fa-exclamation-triangle me-2"></i>
+                        <strong>Advertencia:</strong> Esta acción no se puede deshacer. 
+                        Se eliminará toda la información de la cita.
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                    <i class="fas fa-times me-1"></i>Cancelar
+                </button>
+                <a href="#" id="btnConfirmarEliminar" class="btn btn-danger">
+                    <i class="fas fa-trash me-1"></i>Eliminar Cita
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Agregar event listeners a todos los botones de eliminar
+    const botonesEliminar = document.querySelectorAll('.btn-eliminar-cita');
+    
+    botonesEliminar.forEach(function(boton) {
+        boton.addEventListener('click', function() {
+            const citaId = this.getAttribute('data-cita-id');
+            const paciente = this.getAttribute('data-paciente');
+            const medico = this.getAttribute('data-medico');
+            const fecha = this.getAttribute('data-fecha');
+            const hora = this.getAttribute('data-hora');
+            
+            // Llenar el modal con la información
+            document.getElementById('pacienteCita').textContent = paciente;
+            document.getElementById('medicoCita').textContent = medico;
+            document.getElementById('fechaCita').textContent = fecha;
+            document.getElementById('horaCita').textContent = hora;
+            
+            // Configurar el enlace de eliminación
+            document.getElementById('btnConfirmarEliminar').href = "/citas/eliminar/" + citaId;
+            
+            // Mostrar el modal
+            const modal = new bootstrap.Modal(document.getElementById('modalEliminar'));
+            modal.show();
+        });
+    });
+});
+</script>
+{% endblock %}

@@ -3,138 +3,234 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}Sistema Médico {% endblock %}</title>
+    <title>{% block title %}MediCore Pro - Sistema Médico Avanzado{% endblock %}</title>
     
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Fuentes médicas exclusivas -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <!-- Bootstrap y iconos -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
     
+    <!-- Estilos médicos únicos -->
     <link href="{{ url_for('static', filename='css/styles.css') }}" rel="stylesheet">
     
-    {% block extra_css %}{% endblock %}
+    <!-- Favicon médico -->
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚕️</text></svg>">
+    
+    <!-- Meta tags médicos -->
+    <meta name="description" content="MediCore Pro - Sistema de gestión médica avanzado y profesional">
+    <meta name="keywords" content="sistema médico, gestión hospitalaria, citas médicas, pacientes">
+    <meta name="author" content="MediCore Team">
 </head>
 <body>
-    <!-- Encabezado -->
-    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+    <!-- Header médico revolucionario -->
+    <nav class="navbar navbar-expand-lg">
         <div class="container-fluid">
             <a class="navbar-brand" href="{{ url_for('index') }}">
-                <i class="fas fa-heartbeat me-2"></i>Sistema Médico
-            </a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <div class="navbar-nav ms-auto">
-                    <span class="navbar-text">
-                        <i class="fas fa-user-circle me-1"></i>Presentación
-                    </span>
+                <div class="brand-icon">
+                    <i class="fas fa-heartbeat"></i>
                 </div>
+                <div class="brand-text">
+                    <div class="brand-main">MediCore</div>
+                    <div class="brand-sub">Professional</div>
+                </div>
+            </a>
+            <div class="navbar-nav ms-auto">
+                <span class="navbar-text">
+                    <i class="fas fa-user-shield"></i>
+                    <span>Dr. Sistema Admin</span>
+                    <i class="fas fa-circle text-success" style="font-size: 0.5rem; margin-left: 8px;"></i>
+                </span>
             </div>
         </div>
     </nav>
 
     <div class="container-fluid">
         <div class="row">
-            <!-- Sidebar -->
-            <nav class="col-md-3 col-lg-2 d-md-block sidebar collapse" id="sidebarMenu">
-                <div class="position-sticky pt-3">
+            <!-- Sidebar médico revolucionario -->
+            <nav class="col-md-3 col-lg-2 d-md-block sidebar collapse">
+                <div class="position-sticky">
                     <ul class="nav flex-column">
                         <li class="nav-item">
                             <a class="nav-link {% if request.endpoint == 'index' %}active{% endif %}" 
                                href="{{ url_for('index') }}">
-                                <i class="fas fa-tachometer-alt me-2"></i>Dashboard
+                                <i class="fas fa-chart-pulse"></i>
+                                <span>Dashboard Médico</span>
                             </a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link {% if request.endpoint == 'pacientes' %}active{% endif %}" 
                                href="{{ url_for('pacientes') }}">
-                                <i class="fas fa-users me-2"></i>Pacientes
+                                <i class="fas fa-hospital-user"></i>
+                                <span>Pacientes</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link {% if request.endpoint == 'medicos' %}active{% endif %}" 
+                               href="{{ url_for('medicos') }}">
+                                <i class="fas fa-user-doctor"></i>
+                                <span>Staff Médico</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link {% if request.endpoint == 'citas' %}active{% endif %}" 
+                               href="{{ url_for('citas') }}">
+                                <i class="fas fa-calendar-medical"></i>
+                                <span>Citas Médicas</span>
                             </a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link {% if request.endpoint == 'especialidades' %}active{% endif %}" 
                                href="{{ url_for('especialidades') }}">
-                                <i class="fas fa-stethoscope me-2"></i>Especialidades
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{ url_for('test_conexion') }}">
-                                <i class="fas fa-database me-2"></i>Test Conexión
+                                <i class="fas fa-microscope"></i>
+                                <span>Especialidades</span>
                             </a>
                         </li>
                     </ul>
                 </div>
             </nav>
 
-            <!-- Contenido principal -->
+            <!-- Contenido principal médico -->
             <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
-                <div class="pt-3 pb-2 mb-3">
-
-                    {% block breadcrumb %}{% endblock %}
-                    
-                    <!-- mensaje rapidos -->
+                <div class="pt-4">
+                    <!-- Mensajes flash médicos -->
                     {% with messages = get_flashed_messages(with_categories=true) %}
                         {% if messages %}
-                            <div class="alert-container">
-                                {% for category, message in messages %}
-                                    <div class="alert alert-{{ 'danger' if category == 'error' else 'success' }} alert-dismissible fade show" role="alert">
-                                        <i class="fas fa-{{ 'exclamation-triangle' if category == 'error' else 'check-circle' }} me-2"></i>
-                                        {{ message }}
-                                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                                    </div>
-                                {% endfor %}
-                            </div>
+                            {% for category, message in messages %}
+                                <div class="alert alert-{{ 'danger' if category == 'error' else 'success' }} alert-dismissible fade show slide-in" role="alert">
+                                    <i class="fas fa-{{ 'exclamation-triangle' if category == 'error' else 'check-circle' }} me-2"></i>
+                                    <strong>{{ 'Error:' if category == 'error' else 'Éxito:' }}</strong> {{ message }}
+                                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                                </div>
+                            {% endfor %}
                         {% endif %}
                     {% endwith %}
 
-                    <!-- Contenido principal -->
                     {% block content %}{% endblock %}
                 </div>
             </main>
         </div>
     </div>
 
-    <!-- Bootstrap JavaScript -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Scripts médicos -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
     
-    <!-- JavaScript personalizado -->
+    <!-- Efectos médicos avanzados -->
     <script>
-        // Ocultar despues de 5sg
+        // Animaciones médicas de entrada
         document.addEventListener('DOMContentLoaded', function() {
-            const alerts = document.querySelectorAll('.alert');
-            alerts.forEach(function(alert) {
-                setTimeout(function() {
-                    const bsAlert = new bootstrap.Alert(alert);
-                    bsAlert.close();
-                }, 5000);
+            // Animar cards médicos
+            const cards = document.querySelectorAll('.card');
+            cards.forEach((card, index) => {
+                card.style.animationDelay = `${index * 0.1}s`;
+                card.classList.add('fade-in');
+            });
+            
+            // Animar filas de tabla médica
+            const rows = document.querySelectorAll('.table tbody tr');
+            rows.forEach((row, index) => {
+                row.style.animationDelay = `${index * 0.05}s`;
+                row.classList.add('fade-in');
+            });
+            
+            // Animar sidebar médico
+            const navLinks = document.querySelectorAll('.sidebar .nav-link');
+            navLinks.forEach((link, index) => {
+                link.style.animationDelay = `${index * 0.1}s`;
+                link.classList.add('slide-in');
+            });
+        });
+        
+        // Efecto de ripple médico en botones
+        document.querySelectorAll('.btn').forEach(button => {
+            button.addEventListener('click', function(e) {
+                const ripple = document.createElement('span');
+                const rect = this.getBoundingClientRect();
+                const size = Math.max(rect.width, rect.height);
+                const x = e.clientX - rect.left - size / 2;
+                const y = e.clientY - rect.top - size / 2;
+                
+                ripple.style.width = ripple.style.height = size + 'px';
+                ripple.style.left = x + 'px';
+                ripple.style.top = y + 'px';
+                ripple.classList.add('medical-ripple');
+                
+                this.appendChild(ripple);
+                
+                setTimeout(() => {
+                    ripple.remove();
+                }, 600);
             });
         });
 
-        // Desplazamiento suave del scroll
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
-                e.preventDefault();
-                const target = document.querySelector(this.getAttribute('href'));
-                if (target) {
-                    target.scrollIntoView({
-                        behavior: 'smooth'
-                    });
+        
+        // Contador animado para estadísticas
+        function animateCounter(element, target) {
+            let current = 0;
+            const increment = target / 50;
+            const timer = setInterval(() => {
+                current += increment;
+                if (current >= target) {
+                    current = target;
+                    clearInterval(timer);
                 }
-            });
-        });
-
-        // Agregar estado de carga a los botones
-        document.querySelectorAll('form').forEach(form => {
-            form.addEventListener('submit', function() {
-                const submitBtn = form.querySelector('button[type="submit"]');
-                if (submitBtn) {
-                    submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Procesando...';
-                    submitBtn.disabled = true;
-                }
-            });
+                element.textContent = Math.floor(current);
+            }, 20);
+        }
+        
+        // Animar contadores al cargar
+        document.querySelectorAll('.card-stats .h5').forEach(counter => {
+            const target = parseInt(counter.textContent);
+            if (!isNaN(target)) {
+                counter.textContent = '0';
+                setTimeout(() => animateCounter(counter, target), 500);
+            }
         });
     </script>
     
-    {% block extra_js %}{% endblock %}
+    <style>
+        .medical-ripple {
+            position: absolute;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.6);
+            transform: scale(0);
+            animation: medical-ripple-animation 0.6s linear;
+            pointer-events: none;
+        }
+        
+        @keyframes medical-ripple-animation {
+            to {
+                transform: scale(4);
+                opacity: 0;
+            }
+        }
+        
+        /* Efectos de carga médicos */
+        .loading-medical {
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .loading-medical::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(0, 102, 204, 0.2), transparent);
+            animation: medical-loading 1.5s infinite;
+        }
+        
+        @keyframes medical-loading {
+            0% { left: -100%; }
+            100% { left: 100%; }
+        }
+    </style>
+    
+    {% block scripts %}{% endblock %}
 </body>
 </html>

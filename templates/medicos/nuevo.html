@@ -1,0 +1,179 @@
+{% extends "base.html" %}
+
+{% block title %}Nuevo Médico - MediCore{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+    <h1 class="h2 text-gradient">
+        <i class="fas fa-user-plus me-2"></i>Agregar Nuevo Médico
+    </h1>
+    <a href="{{ url_for('medicos') }}" class="btn btn-secondary">
+        <i class="fas fa-arrow-left me-2"></i>Volver a Lista
+    </a>
+</div>
+
+<div class="form-container">
+    <div class="card shadow">
+        <div class="card-header bg-success text-white">
+            <h5 class="mb-0">
+                <i class="fas fa-user-md me-2"></i>Información del Médico
+            </h5>
+        </div>
+        <div class="card-body">
+            <form method="POST" id="medicoForm">
+                <!-- Información Personal -->
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label for="nombre" class="form-label">
+                            <i class="fas fa-user"></i>Nombre *
+                        </label>
+                        <input type="text" class="form-control" id="nombre" name="nombre" required
+                               placeholder="Ingrese el nombre del médico">
+                        <div class="form-text">Nombre del médico especialista</div>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label for="apellido" class="form-label">
+                            <i class="fas fa-user"></i>Apellido *
+                        </label>
+                        <input type="text" class="form-control" id="apellido" name="apellido" required
+                               placeholder="Ingrese el apellido del médico">
+                        <div class="form-text">Apellido del médico especialista</div>
+                    </div>
+                </div>
+
+                <hr class="my-4">
+                <h6 class="text-primary mb-3">
+                    <i class="fas fa-key me-2"></i>Datos de Acceso al Sistema
+                </h6>
+
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label for="usuario" class="form-label">
+                            <i class="fas fa-user-circle"></i>Usuario *
+                        </label>
+                        <input type="text" class="form-control" id="usuario" name="usuario" required
+                               placeholder="Nombre de usuario único">
+                        <div class="form-text">Se mostrará como "Dr. [usuario]" en el sistema</div>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label for="email" class="form-label">
+                            <i class="fas fa-envelope"></i>Email *
+                        </label>
+                        <input type="email" class="form-control" id="email" name="email" required
+                               placeholder="correo@ejemplo.com">
+                        <div class="form-text">Email para acceso y notificaciones</div>
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <label for="password" class="form-label">
+                        <i class="fas fa-lock"></i>Contraseña *
+                    </label>
+                    <input type="password" class="form-control" id="password" name="password" required
+                           placeholder="Mínimo 6 caracteres">
+                    <div class="form-text">Contraseña segura para el acceso al sistema</div>
+                </div>
+
+                <hr class="my-4">
+                <h6 class="text-primary mb-3">
+                    <i class="fas fa-stethoscope me-2"></i>Información Profesional
+                </h6>
+
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label for="especialidad_id" class="form-label">
+                            <i class="fas fa-stethoscope"></i>Especialidad Médica *
+                        </label>
+                        <select class="form-select" id="especialidad_id" name="especialidad_id" required>
+                            <option value="">Selecciona una especialidad</option>
+                            {% for especialidad in especialidades %}
+                            <option value="{{ especialidad.id }}">{{ especialidad.nombre }}</option>
+                            {% endfor %}
+                        </select>
+                        <div class="form-text">Área de especialización médica</div>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label for="num_licencia" class="form-label">
+                            <i class="fas fa-certificate"></i>Número de Licencia *
+                        </label>
+                        <input type="text" class="form-control" id="num_licencia" name="num_licencia" required
+                               placeholder="Ej: CMP-12345">
+                        <div class="form-text">Número único de licencia médica</div>
+                    </div>
+                </div>
+
+                <div class="mb-4">
+                    <label for="telefono" class="form-label">
+                        <i class="fas fa-phone"></i>Teléfono de Contacto
+                    </label>
+                    <input type="tel" class="form-control" id="telefono" name="telefono"
+                           placeholder="Ej: +51 999 999 999">
+                    <div class="form-text">Número de contacto profesional (opcional)</div>
+                </div>
+
+                <div class="d-flex justify-content-between">
+                    <a href="{{ url_for('medicos') }}" class="btn btn-secondary">
+                        <i class="fas fa-times me-1"></i>Cancelar
+                    </a>
+                    <button type="submit" class="btn btn-success">
+                        <i class="fas fa-save me-1"></i>Guardar Médico
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+document.getElementById('medicoForm').addEventListener('submit', function(e) {
+    const nombre = document.getElementById('nombre').value.trim();
+    const apellido = document.getElementById('apellido').value.trim();
+    const usuario = document.getElementById('usuario').value.trim();
+    const email = document.getElementById('email').value.trim();
+    const password = document.getElementById('password').value;
+    const numLicencia = document.getElementById('num_licencia').value.trim();
+    
+    // Validar nombre
+    if (nombre.length < 2) {
+        e.preventDefault();
+        alert('El nombre debe tener al menos 2 caracteres');
+        return;
+    }
+    
+    // Validar apellido
+    if (apellido.length < 2) {
+        e.preventDefault();
+        alert('El apellido debe tener al menos 2 caracteres');
+        return;
+    }
+    
+    // Validar usuario
+    if (usuario.length < 3) {
+        e.preventDefault();
+        alert('El usuario debe tener al menos 3 caracteres');
+        return;
+    }
+    
+    // Validar email
+    if (!email.includes('@')) {
+        e.preventDefault();
+        alert('Ingrese un email válido');
+        return;
+    }
+    
+    // Validar contraseña
+    if (password.length < 6) {
+        e.preventDefault();
+        alert('La contraseña debe tener al menos 6 caracteres');
+        return;
+    }
+    
+    // Validar número de licencia
+    if (numLicencia.length < 3) {
+        e.preventDefault();
+        alert('El número de licencia debe tener al menos 3 caracteres');
+        return;
+    }
+});
+</script>
+{% endblock %}

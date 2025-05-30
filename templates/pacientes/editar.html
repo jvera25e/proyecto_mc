@@ -1,0 +1,115 @@
+{% extends "base.html" %}
+
+{% block title %}Editar Paciente - Sistema Médico{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+    <h1 class="h2">
+        <i class="fas fa-user-edit me-2"></i>Editar Paciente
+    </h1>
+    <a href="{{ url_for('pacientes') }}" class="btn btn-secondary">
+        <i class="fas fa-arrow-left me-2"></i>Volver
+    </a>
+</div>
+
+<div class="card shadow form-container">
+    <div class="card-header bg-warning text-dark">
+        <h5 class="mb-0">
+            <i class="fas fa-user me-2"></i>Información del Paciente
+        </h5>
+    </div>
+    <div class="card-body">
+        <form method="POST" id="pacienteForm">
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label for="nombres" class="form-label">
+                        <i class="fas fa-user"></i>Nombres *
+                    </label>
+                    <input type="text" class="form-control" id="nombres" name="nombres" 
+                           value="{{ paciente.nombres }}" required>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label for="apellidos" class="form-label">
+                        <i class="fas fa-user"></i>Apellidos *
+                    </label>
+                    <input type="text" class="form-control" id="apellidos" name="apellidos" 
+                           value="{{ paciente.apellidos }}" required>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label for="fecha_nacimiento" class="form-label">
+                        <i class="fas fa-calendar-alt"></i>Fecha de Nacimiento *
+                    </label>
+                    <input type="date" class="form-control" id="fecha_nacimiento" name="fecha_nacimiento" 
+                           value="{{ paciente.fecha_nacimiento.strftime('%Y-%m-%d') }}" required>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label for="telefono" class="form-label">
+                        <i class="fas fa-phone"></i>Teléfono
+                    </label>
+                    <input type="tel" class="form-control" id="telefono" name="telefono" 
+                           value="{{ paciente.telefono or '' }}">
+                </div>
+            </div>
+
+            <div class="mb-3">
+                <label for="direccion" class="form-label">
+                    <i class="fas fa-map-marker-alt"></i>Dirección
+                </label>
+                <input type="text" class="form-control" id="direccion" name="direccion" 
+                       value="{{ paciente.direccion or '' }}">
+            </div>
+
+            <div class="mb-3">
+                <label for="email" class="form-label">
+                    <i class="fas fa-envelope"></i>Email *
+                </label>
+                <input type="email" class="form-control" id="email" name="email" 
+                       value="{{ paciente.email }}" required>
+            </div>
+
+            <div class="alert alert-info">
+                <i class="fas fa-info-circle me-2"></i>
+                <strong>Usuario:</strong> {{ paciente.usuario }} (no se puede modificar)
+            </div>
+
+            <div class="d-flex justify-content-between">
+                <a href="{{ url_for('pacientes') }}" class="btn btn-secondary">
+                    <i class="fas fa-times me-1"></i>Cancelar
+                </a>
+                <button type="submit" class="btn btn-warning">
+                    <i class="fas fa-save me-1"></i>Actualizar Paciente
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+document.getElementById('pacienteForm').addEventListener('submit', function(e) {
+    const nombres = document.getElementById('nombres').value.trim();
+    const apellidos = document.getElementById('apellidos').value.trim();
+    const email = document.getElementById('email').value.trim();
+    
+    if (nombres.length < 2) {
+        e.preventDefault();
+        alert('Los nombres deben tener al menos 2 caracteres');
+        return;
+    }
+    
+    if (apellidos.length < 2) {
+        e.preventDefault();
+        alert('Los apellidos deben tener al menos 2 caracteres');
+        return;
+    }
+    
+    if (!email.includes('@')) {
+        e.preventDefault();
+        alert('Ingrese un email válido');
+        return;
+    }
+});
+</script>
+{% endblock %}
