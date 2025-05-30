@@ -302,7 +302,14 @@ body {
   transition: transform 0.3s ease;
 }
 
+.card:hover::before {
+  transform: scaleX(1);
+}
 
+.card:hover {
+  transform: translateY(-8px) scale(1.02);
+  box-shadow: var(--shadow-float);
+}
 
 .card-header {
   background: var(--gradient-primary);
@@ -345,15 +352,17 @@ body {
 /* ===== ESTADÍSTICAS MÉDICAS ===== */
 .card-stats {
   border-radius: var(--radius-xl);
-  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: none;
   position: relative;
   overflow: hidden;
   background: white;
   border: 1px solid #e2e8f0;
 }
 
-
-
+.card-stats:hover {
+  transform: none;
+  box-shadow: var(--shadow-card);
+}
 
 .card-stats .card-body {
   padding: var(--spacing-xl);
@@ -404,14 +413,17 @@ body {
 .card-stats .fa-2x {
   font-size: 4rem;
   opacity: 0.1;
-  transition: all 0.4s ease;
+  transition: none;
   position: absolute;
   right: var(--spacing-lg);
   top: 50%;
   transform: translateY(-50%);
 }
 
-
+.card-stats:hover .fa-2x {
+  opacity: 0.1;
+  transform: translateY(-50%);
+}
 
 /* ===== TABLAS MÉDICAS AVANZADAS ===== */
 .table-container {
@@ -459,9 +471,9 @@ body {
 }
 
 .table tbody tr:hover {
-  background: linear-gradient(135deg, rgba(0, 102, 204, 0.05), rgba(0, 168, 107, 0.05));
-  transform: scale(1.01);
-  box-shadow: 0 4px 12px rgba(0, 102, 204, 0.1);
+  background: transparent;
+  transform: none;
+  box-shadow: none;
 }
 
 .table td {
@@ -853,7 +865,9 @@ body {
     padding: var(--spacing-md) var(--spacing-lg);
   }
 
- 
+  .card-stats:hover {
+    transform: none;
+  }
 
   .form-container {
     padding: var(--spacing-xl);

@@ -128,14 +128,14 @@
                 card.style.animationDelay = `${index * 0.1}s`;
                 card.classList.add('fade-in');
             });
-            
+        
             // Animar filas de tabla médica
             const rows = document.querySelectorAll('.table tbody tr');
             rows.forEach((row, index) => {
                 row.style.animationDelay = `${index * 0.05}s`;
                 row.classList.add('fade-in');
             });
-            
+        
             // Animar sidebar médico
             const navLinks = document.querySelectorAll('.sidebar .nav-link');
             navLinks.forEach((link, index) => {
@@ -143,7 +143,7 @@
                 link.classList.add('slide-in');
             });
         });
-        
+    
         // Efecto de ripple médico en botones
         document.querySelectorAll('.btn').forEach(button => {
             button.addEventListener('click', function(e) {
@@ -152,21 +152,20 @@
                 const size = Math.max(rect.width, rect.height);
                 const x = e.clientX - rect.left - size / 2;
                 const y = e.clientY - rect.top - size / 2;
-                
+            
                 ripple.style.width = ripple.style.height = size + 'px';
                 ripple.style.left = x + 'px';
                 ripple.style.top = y + 'px';
                 ripple.classList.add('medical-ripple');
-                
+            
                 this.appendChild(ripple);
-                
+            
                 setTimeout(() => {
                     ripple.remove();
                 }, 600);
             });
         });
-
-        
+    
         // Contador animado para estadísticas
         function animateCounter(element, target) {
             let current = 0;
@@ -180,7 +179,7 @@
                 element.textContent = Math.floor(current);
             }, 20);
         }
-        
+    
         // Animar contadores al cargar
         document.querySelectorAll('.card-stats .h5').forEach(counter => {
             const target = parseInt(counter.textContent);
