@@ -51,7 +51,7 @@
                                     </a>
                                     <button type="button" 
                                             class="btn btn-sm btn-outline-danger" 
-                                            onclick="confirmarEliminacion('{{ especialidad.id }}', '{{ especialidad.nombre }}', '{{ especialidad.medicos_count }}')" 
+                                            onclick="confirmarEliminacion('{{ especialidad.id }}', '{{ especialidad.nombre }}','{{ especialidad.medicos_count }}')" 
                                             title="Eliminar"
                                             {% if especialidad.medicos_count > 0 %}disabled{% endif %}>
                                         <i class="fas fa-trash"></i>

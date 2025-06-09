@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 30-05-2025 a las 03:25:08
+-- Tiempo de generación: 09-06-2025 a las 16:21:29
 -- Versión del servidor: 10.4.32-MariaDB
 -- Versión de PHP: 8.2.12
 
@@ -37,13 +37,6 @@ CREATE TABLE `citas` (
   `creado_en` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
---
--- Volcado de datos para la tabla `citas`
---
-
-INSERT INTO `citas` (`id`, `paciente_id`, `medico_id`, `fecha_hora`, `estado`, `notas`, `creado_en`) VALUES
-(3, 4, 3, '2025-05-30 20:30:00', 'programada', '', '2025-05-30 00:52:20');
-
 -- --------------------------------------------------------
 
 --
@@ -55,14 +48,6 @@ CREATE TABLE `especialidades` (
   `nombre` varchar(60) NOT NULL,
   `descripcion` text DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Volcado de datos para la tabla `especialidades`
---
-
-INSERT INTO `especialidades` (`id`, `nombre`, `descripcion`) VALUES
-(2, 'Cardiologia', 'asdasdsa'),
-(3, 'Anologo', 'especialista en inspeccion de anos\r\n');
 
 -- --------------------------------------------------------
 
@@ -79,14 +64,6 @@ CREATE TABLE `medicos` (
   `telefono` varchar(20) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
---
--- Volcado de datos para la tabla `medicos`
---
-
-INSERT INTO `medicos` (`id`, `especialidad_id`, `nombre`, `apellido`, `num_licencia`, `telefono`) VALUES
-(3, 3, 'Axel', 'Menendez', '5621561', '058981256'),
-(5, 2, 'Valentina', 'Vera', '9859926', '9595165168');
-
 -- --------------------------------------------------------
 
 --
@@ -101,13 +78,6 @@ CREATE TABLE `pacientes` (
   `telefono` varchar(20) DEFAULT NULL,
   `direccion` varchar(150) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Volcado de datos para la tabla `pacientes`
---
-
-INSERT INTO `pacientes` (`id`, `nombres`, `apellidos`, `fecha_nacimiento`, `telefono`, `direccion`) VALUES
-(4, 'Jack ', 'Vera', '2003-10-25', '0995556295', 'Av ejercito');
 
 -- --------------------------------------------------------
 
@@ -142,15 +112,6 @@ CREATE TABLE `usuarios` (
   `hash_clave` char(60) NOT NULL,
   `creado_en` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Volcado de datos para la tabla `usuarios`
---
-
-INSERT INTO `usuarios` (`id`, `rol_id`, `usuario`, `email`, `hash_clave`, `creado_en`) VALUES
-(3, 2, 'analogo01', 'analogo01@jashdjas.com', 'scrypt:32768:8:1$f1TT7AmbRlfxF92H$270de31b86e5ce4233dfae81d2', '2025-05-30 00:50:41'),
-(4, 1, 'jvera25', 'jackvera0352@outlook.com', 'scrypt:32768:8:1$TJqK6V7UOqFAt4CI$bec773b487638e3fc6c4c2c1c3', '2025-05-30 00:51:56'),
-(5, 2, 'vmolina', 'ajkasd@jiqowje.com', 'scrypt:32768:8:1$UjmwHqn1NEdt2QAm$1108ae9094bb5ba65019936d8f', '2025-05-30 01:00:42');
 
 --
 -- Índices para tablas volcadas
@@ -254,10 +215,10 @@ ALTER TABLE `pacientes`
   ADD CONSTRAINT `pacientes_ibfk_1` FOREIGN KEY (`id`) REFERENCES `usuarios` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
--- Filtros para la tabla `roles`
+-- Filtros para la tabla `usuarios`
 --
-ALTER TABLE `roles`
-  ADD CONSTRAINT `FK_PACIENTE_ROLES` FOREIGN KEY (`id`) REFERENCES `usuarios` (`rol_id`);
+ALTER TABLE `usuarios`
+  ADD CONSTRAINT `fk_usuarios_roles` FOREIGN KEY (`rol_id`) REFERENCES `roles` (`id`) ON UPDATE CASCADE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
